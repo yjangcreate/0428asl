@@ -61,6 +61,12 @@ public class GlobalManager : MonoBehaviour
     public Button HowAreYouInputSkipButton;
     public List<GameObject> HowAreYouObjectList;
 
+    [Space]
+    public SignTrain signTrain;
+    public Toggle Tired;
+    public Toggle Good;
+    public Toggle Bad;
+
     [Space(10)]
     public Button FeelingInputSkipButton;
 
@@ -77,6 +83,27 @@ public class GlobalManager : MonoBehaviour
         HowAreYouInputSkipButton.onClick.AddListener(StepHowAreYou);
         FeelingInputSkipButton.onClick.AddListener(StepInputFeeling);
 
+        Tired.onValueChanged.AddListener(val => { 
+            if (val == true)
+            {
+                signTrain.SetNewState(EHandState.Tired);
+            }
+        });
+        Good.onValueChanged.AddListener(val =>
+        {
+            if (val == true)
+            {
+                signTrain.SetNewState(EHandState.Good);
+            }
+        });
+        Bad.onValueChanged.AddListener(val =>
+        {
+            if (val == true)
+            {
+                signTrain.SetNewState(EHandState.Bad);
+            }
+        });
+
         // 2025.04.28 비활성화 함
         //// 스타트 버튼 활성화 조건
         //UserNameField.onValueChanged.AddListener((str) => { 
@@ -86,6 +113,7 @@ public class GlobalManager : MonoBehaviour
 
     public void SetGameState(GameState state)
     {
+        signTrain.gameObject.SetActive(false);
         CurrentGameState = state;
         switch (state)
         {
@@ -131,6 +159,20 @@ public class GlobalManager : MonoBehaviour
                 Character.OnIdle.AddListener(EndCharacterHowAreYou);
                 break;
             case GameState.User_InputFeeling:
+                signTrain.gameObject.SetActive(true);
+                if (Tired.isOn)
+                {
+                    signTrain.SetNewState(EHandState.Tired);
+                }
+                if (Good.isOn)
+                {
+                    signTrain.SetNewState(EHandState.Good);
+                }
+                if (Bad.isOn)
+                {
+                    signTrain.SetNewState(EHandState.Bad);
+                }
+
                 Debug.Log("GlobalManager: 게임 상태를 User_InputFeeling으로 설정합니다.");
                 SetUIState(UIState.FeelingInput);
                 break;
@@ -247,6 +289,7 @@ public class GlobalManager : MonoBehaviour
 
     public void StepInputFeeling()
     {
+        signTrain.gameObject.SetActive(false);
         SetGameState(GameState.EndMenu);
     }
 
