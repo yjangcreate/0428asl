@@ -12,7 +12,7 @@ public enum GameState
     Character_AskName,          // 캐릭터가 사용자의 이름을 묻는 화면
     User_InputName,             // 사용자가 수어로 이름을 입력하는 화면
     User_HowAreYou,             // 사용자가 수어로 기분을 묻는 화면
-    Character_AnswerFeeling,    // 캐릭터가 사용자의 기분을 묻는 화면
+    Character_HowAreYou,    // 캐릭터가 사용자의 기분을 묻는 화면
     User_InputFeeling,          // 사용자가 수어로 감정을 입력하는 화면
     EndMenu,                    // 다음 시나리오로 전환하는 화면
 }
@@ -77,10 +77,11 @@ public class GlobalManager : MonoBehaviour
         HowAreYouInputSkipButton.onClick.AddListener(StepHowAreYou);
         FeelingInputSkipButton.onClick.AddListener(StepInputFeeling);
 
-        // 스타트 버튼 활성화 조건
-        UserNameField.onValueChanged.AddListener((str) => { 
-            StartButton.enabled = !string.IsNullOrEmpty(str); // 텍스트가 입력되어야만 넘어감
-        });
+        // 2025.04.28 비활성화 함
+        //// 스타트 버튼 활성화 조건
+        //UserNameField.onValueChanged.AddListener((str) => { 
+        //    StartButton.enabled = !string.IsNullOrEmpty(str); // 텍스트가 입력되어야만 넘어감
+        //});
     }
 
     public void SetGameState(GameState state)
@@ -95,39 +96,39 @@ public class GlobalManager : MonoBehaviour
                 Debug.Log("GlobalManager: 게임 상태를 StartMenu로 설정합니다.");
                 SetUIState(UIState.StartMenu); // 시작 메뉴 UI 활성화
                 break;
-            case GameState.Character_HelloMyName:
-                Debug.Log("GlobalManager: 게임 상태를 Character_HelloMyName으로 설정합니다.");
+            //case GameState.Character_HelloMyName:
+            //    Debug.Log("GlobalManager: 게임 상태를 Character_HelloMyName으로 설정합니다.");
+            //    SetUIState(UIState.SubTitle);
+            //    CharacterAnimator.SetTrigger("HelloMyNameTrigger"); // 캐릭터 애니메이션 트리거 설정
+
+            //    // 캐릭터 애니메이션 종료 후 다음 상태로 전환
+            //    Character.OnIdle.AddListener(EndCharacterHellowMyName);
+            //    break;
+            //case GameState.Character_AskName:
+            //    Debug.Log("GlobalManager: 게임 상태를 Character_AskName으로 설정합니다.");
+            //    SetUIState(UIState.SubTitle);
+            //    CharacterAnimator.SetTrigger("AskNameTrigger"); // 캐릭터 애니메이션 트리거 설정
+
+            //    // 캐릭터 애니메이션 종료 후 다음 상태로 전환
+            //    Character.OnIdle.AddListener(EndCharacterAskName);
+            //    break;
+            //case GameState.User_InputName:
+            //    Debug.Log("GlobalManager: 게임 상태를 User_InputName으로 설정합니다.");
+            //    SetUIState(UIState.NameInput);
+            //    StartInputName();
+            //    break;
+            //case GameState.User_HowAreYou:
+            //    Debug.Log("GlobalManager: 게임 상태를 User_HowAreYou으로 설정합니다.");
+            //    SetUIState(UIState.HowAreYouInput);
+            //    StartHowAreYou();
+            //    break;
+            case GameState.Character_HowAreYou:
+                Debug.Log("GlobalManager: 게임 상태를 Character_HowAreYou으로 설정합니다.");
                 SetUIState(UIState.SubTitle);
-                CharacterAnimator.SetTrigger("HelloMyNameTrigger"); // 캐릭터 애니메이션 트리거 설정
+                CharacterAnimator.SetTrigger("HowAreYouTrigger"); // 캐릭터 애니메이션 트리거 설정
 
                 // 캐릭터 애니메이션 종료 후 다음 상태로 전환
-                Character.OnIdle.AddListener(EndCharacterHellowMyName);
-                break;
-            case GameState.Character_AskName:
-                Debug.Log("GlobalManager: 게임 상태를 Character_AskName으로 설정합니다.");
-                SetUIState(UIState.SubTitle);
-                CharacterAnimator.SetTrigger("AskNameTrigger"); // 캐릭터 애니메이션 트리거 설정
-
-                // 캐릭터 애니메이션 종료 후 다음 상태로 전환
-                Character.OnIdle.AddListener(EndCharacterAskName);
-                break;
-            case GameState.User_InputName:
-                Debug.Log("GlobalManager: 게임 상태를 User_InputName으로 설정합니다.");
-                SetUIState(UIState.NameInput);
-                StartInputName();
-                break;
-            case GameState.User_HowAreYou:
-                Debug.Log("GlobalManager: 게임 상태를 User_HowAreYou으로 설정합니다.");
-                SetUIState(UIState.HowAreYouInput);
-                StartHowAreYou();
-                break;
-            case GameState.Character_AnswerFeeling:
-                Debug.Log("GlobalManager: 게임 상태를 Character_AnswerFeeling으로 설정합니다.");
-                SetUIState(UIState.SubTitle);
-                CharacterAnimator.SetTrigger("AnswerFeelingTrigger"); // 캐릭터 애니메이션 트리거 설정
-
-                // 캐릭터 애니메이션 종료 후 다음 상태로 전환
-                Character.OnIdle.AddListener(EndCharacterAnswerFeeling);
+                Character.OnIdle.AddListener(EndCharacterHowAreYou);
                 break;
             case GameState.User_InputFeeling:
                 Debug.Log("GlobalManager: 게임 상태를 User_InputFeeling으로 설정합니다.");
@@ -187,7 +188,8 @@ public class GlobalManager : MonoBehaviour
         Debug.Log("GlobalManager: 시나리오를 시작합니다.");
 
         // 다음 시나리오로 전환
-        SetGameState(GameState.Character_HelloMyName);
+        //SetGameState(GameState.Character_HelloMyName);
+        SetGameState(GameState.Character_HowAreYou);
     }
 
     public void OnClickRestartButton()
@@ -239,7 +241,7 @@ public class GlobalManager : MonoBehaviour
         }
         else
         {
-            SetGameState(GameState.Character_AnswerFeeling);
+            SetGameState(GameState.Character_HowAreYou);
         }
     }
 
@@ -264,11 +266,11 @@ public class GlobalManager : MonoBehaviour
         SetGameState(GameState.User_InputName);
     }
 
-    public void EndCharacterAnswerFeeling()
+    public void EndCharacterHowAreYou()
     {
-        Debug.Log("GlobalManager: 캐릭터가 AnswerFeeling 애니메이션을 종료합니다.");
+        Debug.Log("GlobalManager: 캐릭터가 HowAreYou 애니메이션을 종료합니다.");
         // 캐릭터 애니메이션 종료 후 다음 상태로 전환
-        Character.OnIdle.RemoveListener(EndCharacterAnswerFeeling); // 리스너 제거
+        Character.OnIdle.RemoveListener(EndCharacterHowAreYou); // 리스너 제거
         SetGameState(GameState.User_InputFeeling);
     }
 }
